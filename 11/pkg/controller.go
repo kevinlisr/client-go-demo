@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"context"
+	v13 "k8s.io/api/core/v1"
 	v15 "k8s.io/api/networking/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	v16 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -54,10 +55,10 @@ func (c *controller) enqueue(obj interface{})  {
 }
 
 func (c *controller) deleteIngress(obj interface{}) {
-	println("delete resource")
+	println("delete ingress resource")
 	ingress := obj.(*v15.Ingress)
 	ownerReference := v16.GetControllerOf(ingress)
-	if ownerReference != nil {
+	if ownerReference == nil {
 		return
 	}
 	if ownerReference.Kind != "Service" {
@@ -93,6 +94,7 @@ func (c *controller) processNextItem() bool {
 	if err != nil {
 		c.handlerError(key, err)
 	}
+	return true
 }
 
 func (c *controller) syncService(key string) error {
@@ -119,7 +121,7 @@ func (c *controller) syncService(key string) error {
 
 	if ok && errors.IsNotFound(err){
 		// create ingress
-		ig := c.constructIngress(namespaceKey, name)
+		ig := c.constructIngress(service)
 		_, err := c.client.NetworkingV1().Ingresses(namespaceKey).Create(context.TODO(), ig, v16.CreateOptions{})
 		if err != nil{
 			return err
@@ -131,6 +133,7 @@ func (c *controller) syncService(key string) error {
 			return err
 		}
 	}
+	return nil
 }
 
 func (c *controller) handlerError(key string, err error) {
@@ -143,10 +146,15 @@ func (c *controller) handlerError(key string, err error) {
 	c.queue.Forget(key)
 }
 
-func (c *controller) constructIngress(namespaceKey string, name string) *v15.Ingress {
+func (c *controller) constructIngress(service *v13.Service) *v15.Ingress {
 	ingress := v15.Ingress{}
-	ingress.Name = name
-	ingress.Namespace = namespaceKey
+
+	ingress.ObjectMeta.OwnerReferences = []v16.OwnerReference{
+		*v16.NewControllerRef(service, v13.SchemeGroupVersion.WithKind("service")),
+	}
+
+	ingress.Name = service.Name
+	ingress.Namespace = service.Namespace
 	PathType := v15.PathTypePrefix
 	ingress.Spec = v15.IngressSpec{
 		Rules: []v15.IngressRule{
@@ -160,7 +168,7 @@ func (c *controller) constructIngress(namespaceKey string, name string) *v15.Ing
 								PathType: &PathType,
 								Backend: v15.IngressBackend{
 									Service: &v15.IngressServiceBackend{
-										Name: name,
+										Name: service.Name,
 										Port: v15.ServiceBackendPort{
 											Number: 80,
 										},
