@@ -32,7 +32,7 @@ type controller struct {
 }
 
 func (c *controller) updataService(oldObj interface{}, newObj interface{}) {
-	println("update resource")
+	println("update Service")
 	// todo compare annotation
 	if reflect.DeepEqual(oldObj, newObj) {
 		return
@@ -41,7 +41,7 @@ func (c *controller) updataService(oldObj interface{}, newObj interface{}) {
 }
 
 func (c *controller) addService(obj interface{}) {
-	println("add resource")
+	println("add Service")
 	c.enqueue(obj)
 }
 
@@ -55,7 +55,7 @@ func (c *controller) enqueue(obj interface{})  {
 }
 
 func (c *controller) deleteIngress(obj interface{}) {
-	println("delete ingress resource")
+	println("delete ingress")
 	ingress := obj.(*v15.Ingress)
 	ownerReference := v16.GetControllerOf(ingress)
 	if ownerReference == nil {
@@ -156,7 +156,9 @@ func (c *controller) constructIngress(service *v13.Service) *v15.Ingress {
 	ingress.Name = service.Name
 	ingress.Namespace = service.Namespace
 	PathType := v15.PathTypePrefix
+	icn := "nginx"
 	ingress.Spec = v15.IngressSpec{
+		IngressClassName: &icn,
 		Rules: []v15.IngressRule{
 			{
 				Host: "example.com",
