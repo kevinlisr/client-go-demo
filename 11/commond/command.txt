@@ -1,7 +1,7 @@
 kubectl create deploy ingress-manager --image=kevinstudy/ingress-manager:v1.0.0 --dry-run=client -o yaml > /root/baidingyunyuansheng/client-go-demo/11/manifests/ingress-manager.yml
 kubectl apply -f manifests/ingress-manager.yml
 
-kubectl create sc ingress-manager-sa --dry-run=client -oyaml >manifests/ingress-manager-sa.yml
+kubectl create sa ingress-manager-sa --dry-run=client -oyaml >manifests/ingress-manager-sa.yml
 
 edit ingress-manager deployment
 
