@@ -1,1 +1,5 @@
-package _4
+package main
+
+func main() {
+
+}
