@@ -1,4 +1,4 @@
- domain: baiding.tech
+domain: baiding.tech
 layout:
 - go.kubebuilder.io/v3
 projectName: kubebuilder-demo
