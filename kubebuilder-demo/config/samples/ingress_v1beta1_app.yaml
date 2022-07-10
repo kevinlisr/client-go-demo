@@ -1,0 +1,9 @@
+apiVersion: ingress.baiding.tech/v1beta1
+kind: App
+metadata:
+  name: app-sample
+spec:
+  image: nginx:alpine
+  replicas: 2
+  enable_ingress: true
+  enable_service: true
