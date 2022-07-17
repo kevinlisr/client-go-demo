@@ -63,13 +63,13 @@ func (r *AppReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 	if err := r.Get(ctx, req.NamespacedName, app); err != nil {
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
-
 	//根据app的配置进行处理
 	//1. Deployment的处理
 	deployment := utils.NewDeployment(app)
 	if err := controllerutil.SetControllerReference(app, deployment, r.Scheme); err != nil {
 		return ctrl.Result{}, err
 	}
+
 	//查找同名deployment
 	d := &v1.Deployment{}
 	if err := r.Get(ctx, req.NamespacedName, d); err != nil {
@@ -112,7 +112,6 @@ func (r *AppReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 
 		}
 	}
-
 	//3. Ingress的处理,ingress配置可能为空
 	// TODO
 	if !app.Spec.EnableService {
@@ -145,6 +144,7 @@ func (r *AppReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 	}
 
 	return ctrl.Result{}, nil
+
 }
 
 // SetupWithManager sets up the controller with the Manager.

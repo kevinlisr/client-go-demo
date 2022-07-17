@@ -1,0 +1,6 @@
+domain: kevin.com
+layout:
+- go.kubebuilder.io/v3
+projectName: kubebuilder-demo1
+repo: github.com/kubebuilder-demo1
+version: "3"
