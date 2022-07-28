@@ -1,17 +1,17 @@
-domain: kevin.com
+domain: baiding.tech
 layout:
 - go.kubebuilder.io/v3
-projectName: kubebuilder-demo1
-repo: github.com/kubebuilder-demo1
+projectName: kubebuilder-demo2
+repo: github.com/kubebuilder-demo2
 resources:
 - api:
     crdVersion: v1
     namespaced: true
   controller: true
-  domain: kevin.com
-  group: kevinapp
-  kind: Nginxkevin
-  path: github.com/kubebuilder-demo1/api/v1beta1
+  domain: baiding.tech
+  group: ingressapp
+  kind: Houchangzao
+  path: github.com/kubebuilder-demo2/api/v1beta1
   version: v1beta1
   webhooks:
     conversion: true

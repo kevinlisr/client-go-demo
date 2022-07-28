@@ -31,8 +31,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	kevinappv1beta1 "github.com/kubebuilder-demo1/api/v1beta1"
-	"github.com/kubebuilder-demo1/controllers"
+	ingressappv1beta1 "github.com/kubebuilder-demo2/api/v1beta1"
+	"github.com/kubebuilder-demo2/controllers"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -44,7 +44,7 @@ var (
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 
-	utilruntime.Must(kevinappv1beta1.AddToScheme(scheme))
+	utilruntime.Must(ingressappv1beta1.AddToScheme(scheme))
 	//+kubebuilder:scaffold:scheme
 }
 
@@ -65,30 +65,41 @@ func main() {
 
 	ctrl.SetLogger(zap.New(zap.UseFlagOptions(&opts)))
 
-	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
+	options := ctrl.Options{
 		Scheme:                 scheme,
 		MetricsBindAddress:     metricsAddr,
 		Port:                   9443,
 		HealthProbeBindAddress: probeAddr,
 		LeaderElection:         enableLeaderElection,
-		LeaderElectionID:       "cbf4d531.kevin.com",
-	})
+		LeaderElectionID:       "c8f4d078.baiding.tech",
+	}
+
+	if os.Getenv("ENVIRONMENT") == "DEV" {
+		path, err := os.Getwd()
+		if err != nil {
+			setupLog.Error(err, "unable to get work dir")
+			os.Exit(1)
+		}
+		options.CertDir = path + "/certs"
+	}
+
+	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), options)
 	if err != nil {
 		setupLog.Error(err, "unable to start manager")
 		os.Exit(1)
 	}
 
-	if err = (&controllers.NginxkevinReconciler{
+	if err = (&controllers.HouchangzaoReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Nginxkevin")
+		setupLog.Error(err, "unable to create controller", "controller", "Houchangzao")
 		os.Exit(1)
 	}
-	//if err = (&kevinappv1beta1.Nginxkevin{}).SetupWebhookWithManager(mgr); err != nil {
-	//	setupLog.Error(err, "unable to create webhook", "webhook", "Nginxkevin")
-	//	os.Exit(1)
-	//}
+	if err = (&ingressappv1beta1.Houchangzao{}).SetupWebhookWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create webhook", "webhook", "Houchangzao")
+		os.Exit(1)
+	}
 	//+kubebuilder:scaffold:builder
 
 	if err := mgr.AddHealthzCheck("healthz", healthz.Ping); err != nil {

@@ -1,0 +1,9 @@
+apiVersion: ingressapp.baiding.tech/v1beta1
+kind: Houchangzao
+metadata:
+  name: houchangzao-sample
+spec:
+  image: nginx:alpine
+  replicas: 3
+  enable_ingress: true
+  enable_service: true

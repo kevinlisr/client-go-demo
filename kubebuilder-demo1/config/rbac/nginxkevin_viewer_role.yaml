@@ -1,0 +1,20 @@
+# permissions for end users to view nginxkevins.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nginxkevin-viewer-role
+rules:
+- apiGroups:
+  - kevinapp.kevin.com
+  resources:
+  - nginxkevins
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - kevinapp.kevin.com
+  resources:
+  - nginxkevins/status
+  verbs:
+  - get

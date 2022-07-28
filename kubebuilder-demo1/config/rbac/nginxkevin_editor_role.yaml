@@ -1,0 +1,24 @@
+# permissions for end users to edit nginxkevins.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nginxkevin-editor-role
+rules:
+- apiGroups:
+  - kevinapp.kevin.com
+  resources:
+  - nginxkevins
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - kevinapp.kevin.com
+  resources:
+  - nginxkevins/status
+  verbs:
+  - get

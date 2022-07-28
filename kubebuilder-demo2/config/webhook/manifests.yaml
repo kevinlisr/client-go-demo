@@ -1,0 +1,54 @@
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  creationTimestamp: null
+  name: mutating-webhook-configuration
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: system
+      path: /mutate-ingressapp-baiding-tech-v1beta1-houchangzao
+  failurePolicy: Fail
+  name: mhouchangzao.kb.io
+  rules:
+  - apiGroups:
+    - ingressapp.baiding.tech
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - houchangzaoes
+  sideEffects: None
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  creationTimestamp: null
+  name: validating-webhook-configuration
+webhooks:
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: system
+      path: /validate-ingressapp-baiding-tech-v1beta1-houchangzao
+  failurePolicy: Fail
+  name: vhouchangzao.kb.io
+  rules:
+  - apiGroups:
+    - ingressapp.baiding.tech
+    apiVersions:
+    - v1beta1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - houchangzaoes
+  sideEffects: None

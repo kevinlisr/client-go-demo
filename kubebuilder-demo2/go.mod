@@ -1,4 +1,4 @@
-module github.com/kubebuilder-demo1
+module github.com/kubebuilder-demo2
 
 go 1.17
 
