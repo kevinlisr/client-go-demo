@@ -1,0 +1,24 @@
+# permissions for end users to edit lezaoes.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: lezao-editor-role
+rules:
+- apiGroups:
+  - lecang.nancal.com
+  resources:
+  - lezaoes
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - lecang.nancal.com
+  resources:
+  - lezaoes/status
+  verbs:
+  - get

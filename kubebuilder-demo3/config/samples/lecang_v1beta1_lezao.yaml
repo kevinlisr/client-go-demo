@@ -1,0 +1,10 @@
+apiVersion: lecang.nancal.com/v1beta1
+kind: Lezao
+metadata:
+  name: lezao-sample
+spec:
+  image: nginx:alpine
+  replicas: 2
+  enable_ingress: false
+  enable_service: true
+

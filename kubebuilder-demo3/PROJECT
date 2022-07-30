@@ -1,0 +1,20 @@
+domain: nancal.com
+layout:
+- go.kubebuilder.io/v3
+projectName: kubebuilder-demo3
+repo: github.com/kubebuilder-demo3
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: nancal.com
+  group: lecang
+  kind: Lezao
+  path: github.com/kubebuilder-demo3/api/v1beta1
+  version: v1beta1
+  webhooks:
+    defaulting: true
+    validation: true
+    webhookVersion: v1
+version: "3"
