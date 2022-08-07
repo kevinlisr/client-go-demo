@@ -5,6 +5,6 @@ metadata:
 spec:
   image: nginx:alpine
   replicas: 2
-  enable_ingress: false
+  enable_ingress: true
   enable_service: true
 
